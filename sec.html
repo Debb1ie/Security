@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>The Secure Developer & Engineer — Cybersecurity 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root[data-theme="dark"] {
+  --bg: #060c1a;
+  --surface: #0c1428;
+  --surface2: #111e38;
+  --surface3: #1a2a48;
+  --border: rgba(100,180,255,.07);
+  --border2: rgba(100,180,255,.15);
+  --text: #e8f4ff;
+  --text-sub: rgba(232,244,255,.75);
+  --text-muted: rgba(232,244,255,.38);
+  --blue: #60a5fa;
+  --blue-glow: rgba(96,165,250,.2);
+  --gold: #fbbf24;
+  --teal: #34d399;
+  --lilac: #a78bfa;
+  --red: #f87171;
+  --nav-bg: rgba(6,12,26,.92);
+  --card-shadow: 0 0 0 1px rgba(100,180,255,.1), 0 32px 80px rgba(20,60,180,.25);
+  --tag-bg: rgba(96,165,250,.1);
+  --tag-border: rgba(96,165,250,.3);
+  --photo-bg: #111e38;
+  --photo-border: rgba(100,180,255,.2);
+}
+:root[data-theme="light"] {
+  --bg: #f0f6ff;
+  --surface: #fff;
+  --surface2: #e4efff;
+  --surface3: #d0e4ff;
+  --border: rgba(20,60,180,.08);
+  --border2: rgba(20,60,180,.18);
+  --text: #06101e;
+  --text-sub: #1a2840;
+  --text-muted: rgba(6,16,30,.45);
+  --blue: #1d4ed8;
+  --blue-glow: rgba(29,78,216,.12);
+  --gold: #b45309;
+  --teal: #0f766e;
+  --lilac: #6d28d9;
+  --red: #dc2626;
+  --nav-bg: rgba(240,246,255,.94);
+  --card-shadow: 0 0 0 1px rgba(20,60,180,.1), 0 16px 50px rgba(20,60,180,.1);
+  --tag-bg: rgba(29,78,216,.08);
+  --tag-border: rgba(29,78,216,.25);
+  --photo-bg: #d0e4ff;
+  --photo-border: rgba(29,78,216,.25);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;transition:background .4s,color .4s}
+
+#cv{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5}
+[data-theme="light"] #cv{opacity:.05}
+
+#prog{position:fixed;top:0;left:0;height:2px;z-index:300;background:linear-gradient(90deg,var(--blue),var(--teal),var(--gold));transition:width .6s cubic-bezier(.4,0,.2,1)}
+
+#top{position:fixed;top:0;left:0;right:0;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 1.2rem;background:var(--bg);border-bottom:1px solid var(--border);z-index:200;backdrop-filter:blur(14px)}
+#top-l{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted)}
+#top-r{display:flex;align-items:center;gap:.8rem}
+#sc{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text-muted)}
+#sc b{color:var(--blue)}
+
+.icon-btn{width:27px;height:27px;border-radius:7px;background:var(--surface2);border:1px solid var(--border2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;flex-shrink:0}
+.icon-btn:hover{background:var(--surface3);border-color:var(--blue)}
+.icon-btn svg{width:13px;height:13px;stroke:var(--text-muted);stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.icon-btn:hover svg{stroke:var(--blue)}
+.ic-compress{display:none}
+
+#tog{width:36px;height:19px;border-radius:999px;background:var(--surface2);border:1px solid var(--border2);cursor:pointer;position:relative;flex-shrink:0}
+#tog::after{content:'';position:absolute;top:2px;left:2px;width:13px;height:13px;border-radius:50%;background:var(--blue);transition:transform .3s cubic-bezier(.4,0,.2,1)}
+[data-theme="light"] #tog::after{transform:translateX(17px)}
+
+.nz{position:fixed;top:44px;bottom:44px;width:9%;z-index:180;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity .25s}
+.nz:hover{opacity:1}
+.nz.L{left:0}
+.nz.R{right:0}
+.arr{width:42px;height:42px;border-radius:50%;background:var(--nav-bg);border:1px solid var(--border2);backdrop-filter:blur(14px);display:flex;align-items:center;justify-content:center;color:var(--blue);font-size:1rem;transition:transform .2s}
+.nz.L:hover .arr{transform:translateX(-4px)}
+.nz.R:hover .arr{transform:translateX(4px)}
+@media(hover:none){.nz{opacity:.22;width:13%}.arr{width:36px;height:36px}}
+
+#sw{position:fixed;top:44px;bottom:44px;left:0;right:0;overflow:hidden}
+
+.slide{position:absolute;inset:0;display:flex;align-items:stretch;justify-content:center;padding:.6rem 2.5%;opacity:0;transform:translateY(24px) scale(.975);pointer-events:none;transition:opacity .5s cubic-bezier(.4,0,.2,1),transform .5s cubic-bezier(.4,0,.2,1);z-index:1}
+.slide.active{opacity:1;transform:none;pointer-events:all;z-index:2}
+.slide.out{opacity:0;transform:translateY(-24px) scale(.975);pointer-events:none}
+
+.card{width:100%;max-width:1240px;background:var(--surface);border:1px solid var(--border2);border-radius:20px;position:relative;overflow:hidden;box-shadow:var(--card-shadow);display:flex;flex-direction:column;flex:1;min-height:0}
+
+.tag{display:inline-flex;align-items:center;padding:.25rem .8rem;border-radius:999px;background:var(--tag-bg);border:1px solid var(--tag-border);font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);width:fit-content;flex-shrink:0}
+.stitle{font-family:'Cormorant Garamond',serif;font-weight:700;line-height:1.1;color:var(--text)}
+.divider{height:1px;background:linear-gradient(90deg,var(--blue),transparent);opacity:.28;margin:.5rem 0 1rem;max-width:160px}
+
+#bot{position:fixed;bottom:0;left:0;right:0;height:44px;display:flex;align-items:center;justify-content:center;gap:.7rem;background:var(--bg);border-top:1px solid var(--border);z-index:200;backdrop-filter:blur(14px)}
+.nb{width:34px;height:30px;border-radius:7px;background:var(--surface);border:1px solid var(--border);color:var(--text);font-size:.82rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s}
+.nb:hover{background:var(--surface2);border-color:var(--blue)}
+.nb:active{transform:scale(.88)}
+.nb:disabled{opacity:.15;pointer-events:none}
+
+#dots{display:flex;align-items:center;gap:3px;max-width:240px;overflow:hidden}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--border2);cursor:pointer;flex-shrink:0;transition:background .3s,width .3s,border-radius .3s}
+.dot.active{background:var(--blue);width:16px;border-radius:3px}
+.dot:hover:not(.active){background:var(--text-muted)}
+
+#sbox{position:fixed;bottom:7px;left:.8rem;display:flex;align-items:center;gap:.35rem;z-index:210}
+#slbl{font-family:'JetBrains Mono',monospace;font-size:.5rem;color:var(--text-muted);letter-spacing:.07em}
+#sinp{width:46px;padding:.25rem .45rem;border-radius:6px;background:var(--surface);border:1px solid var(--border2);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:.6rem;text-align:center;outline:none;-moz-appearance:textfield;transition:.2s}
+#sinp::-webkit-inner-spin-button,#sinp::-webkit-outer-spin-button{-webkit-appearance:none}
+#sinp:focus{border-color:var(--blue);width:58px}
+
+#hint{position:fixed;bottom:52px;left:50%;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-size:.5rem;color:var(--text-muted);letter-spacing:.08em;pointer-events:none;white-space:nowrap;opacity:1;transition:opacity 1s;z-index:210}
+#hint.gone{opacity:0}
+
+/* Photo frames */
+.photo-frame{width:100%;height:100%;border-radius:12px;overflow:hidden;background:var(--photo-bg);border:1px solid var(--photo-border);display:flex;align-items:center;justify-content:center}
+.photo-frame img{width:100%;height:100%;object-fit:cover;display:block}
+.photo-frame.contain img{object-fit:contain}
+.photo-frame .no-photo{display:flex;flex-direction:column;align-items:center;gap:.4rem;opacity:.35;pointer-events:none}
+.photo-frame .no-photo svg{width:22px;height:22px;stroke:var(--blue);stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.photo-frame .no-photo span{font-family:'JetBrains Mono',monospace;font-size:.52rem;color:var(--blue);letter-spacing:.08em}
+
+/* ── TITLE SLIDE ── */
+.s-title .card{flex-direction:row}
+.title-left{flex:1;padding:2.8rem 3rem;display:flex;flex-direction:column;justify-content:center}
+.title-right{width:40%;flex-shrink:0;padding:.8rem .8rem .8rem 0}
+.title-event{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);margin-bottom:1.4rem;display:flex;align-items:center;gap:.5rem}
+.title-event::before{content:'';display:block;width:22px;height:1px;background:var(--blue)}
+.title-h{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:700;font-size:clamp(2.2rem,5vw,4rem);line-height:1.05;background:linear-gradient(140deg,var(--text) 0%,var(--blue) 55%,var(--teal) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.8rem}
+.title-sub{font-size:clamp(.82rem,1.5vw,.98rem);color:var(--text-muted);line-height:1.7;margin-bottom:2rem;font-family:'Cormorant Garamond',serif;font-style:italic}
+.title-presenter{border-top:1px solid var(--border2);padding-top:1.4rem;display:flex;flex-direction:column;gap:.2rem}
+.title-name{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:600;color:var(--text)}
+.title-role{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--blue);letter-spacing:.1em}
+.title-org{font-family:'JetBrains Mono',monospace;font-size:.52rem;color:var(--text-muted);letter-spacing:.05em;margin-top:.1rem}
+
+/* ── OPENER ── */
+.s-opener .card{justify-content:center;align-items:center;text-align:center;padding:3rem 7rem}
+.opener-pre{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);margin-bottom:2rem;opacity:.75}
+.opener-big{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1.8rem,4.8vw,3.8rem);font-weight:400;line-height:1.3;color:var(--text);max-width:860px;margin-bottom:1.8rem}
+.opener-big strong{font-style:normal;font-weight:700;color:var(--blue);-webkit-text-fill-color:var(--blue)}
+.opener-note{font-size:clamp(.88rem,1.5vw,1rem);color:var(--text-muted);font-style:italic;font-family:'Cormorant Garamond',serif}
+
+/* ── STORY ── */
+.s-story .card{flex-direction:row}
+.story-photo-wrap{width:40%;flex-shrink:0;padding:.8rem 0 .8rem .8rem}
+.story-content{flex:1;padding:2.4rem 2.8rem;display:flex;flex-direction:column;justify-content:center}
+.story-content .tag{margin-bottom:.9rem}
+.story-content .stitle{font-size:clamp(1.5rem,2.8vw,2.3rem);margin:.5rem 0}
+.story-body{font-family:'Cormorant Garamond',serif;font-size:clamp(1.08rem,1.8vw,1.28rem);color:var(--text-sub);line-height:1.75;margin-top:.8rem}
+.story-body em{color:var(--blue);font-style:italic}
+
+/* ── STAT ── */
+.s-stat .card{flex-direction:row}
+.stat-left{flex:1;padding:2.8rem 3rem;display:flex;flex-direction:column;justify-content:center}
+.stat-left .tag{margin-bottom:1.2rem}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:clamp(5rem,12vw,9rem);font-weight:700;line-height:1;color:var(--blue);letter-spacing:-.02em}
+.stat-label{font-family:'Cormorant Garamond',serif;font-size:clamp(1.3rem,2.5vw,2rem);font-weight:600;color:var(--text);margin:.35rem 0 1rem;line-height:1.2}
+.stat-body{font-size:clamp(.92rem,1.5vw,1.06rem);color:var(--text-sub);line-height:1.72;max-width:440px}
+.stat-source{margin-top:auto;padding-top:1.4rem;font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--text-muted);letter-spacing:.04em}
+.stat-right{width:38%;flex-shrink:0;padding:.8rem .8rem .8rem 0;display:flex;flex-direction:column;gap:.8rem}
+.stat-photo-wrap{flex:1;min-height:0}
+.mini-list{display:flex;flex-direction:column;gap:.6rem;flex-shrink:0}
+.mini-item{padding:.8rem 1rem;border-radius:10px;background:var(--surface2);border:1px solid var(--border);display:flex;gap:.8rem;align-items:flex-start}
+.mini-val{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:700;color:var(--blue);min-width:48px;line-height:1;flex-shrink:0}
+.mini-lbl{font-size:.83rem;color:var(--text-sub);line-height:1.4}
+
+/* ── QUOTE ── */
+.s-quote .card{flex-direction:row}
+.quote-bar{width:5px;flex-shrink:0;background:linear-gradient(to bottom,var(--blue),var(--teal))}
+.quote-body{flex:1;padding:3rem 4rem;display:flex;flex-direction:column;justify-content:center}
+.quote-mark{font-family:'Cormorant Garamond',serif;font-size:6.5rem;line-height:.7;color:var(--blue);opacity:.16;user-select:none;margin-bottom:.9rem}
+.quote-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1.4rem,3vw,2.4rem);line-height:1.4;color:var(--text);margin-bottom:1.4rem}
+.quote-attr{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.1em;color:var(--text-muted);text-transform:uppercase}
+
+/* ── GRID ── */
+.s-grid .card{padding:2rem 2.5rem}
+.s-grid .stitle{font-size:clamp(1.5rem,2.6vw,2.1rem);margin:.4rem 0 .6rem}
+.ig{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem;flex:1;margin-top:.5rem}
+.igc{background:var(--surface2);border:1px solid var(--border2);border-radius:14px;padding:1.3rem 1.2rem;display:flex;flex-direction:column;gap:.55rem;transition:transform .2s,border-color .2s}
+.igc:hover{transform:translateY(-3px);border-color:var(--blue)}
+.igc-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.igc-icon svg{width:17px;height:17px;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.igc-title{font-family:'Cormorant Garamond',serif;font-size:clamp(.95rem,1.7vw,1.2rem);font-weight:700;color:var(--text);line-height:1.2}
+.igc-body{font-size:clamp(.8rem,1.25vw,.94rem);color:var(--text-muted);line-height:1.55}
+
+/* ── TWOCOL ── */
+.s-twocol .card{flex-direction:row}
+.tc-left{flex:1;padding:2.4rem 2.8rem;display:flex;flex-direction:column;justify-content:center}
+.tc-left .tag{margin-bottom:.8rem}
+.tc-left .stitle{font-size:clamp(1.4rem,2.6vw,2.1rem);margin:.5rem 0 1rem}
+.tc-right{width:42%;flex-shrink:0;padding:.8rem .8rem .8rem 0}
+.bullet-list{display:flex;flex-direction:column;gap:.65rem}
+.bullet-item{display:flex;align-items:flex-start;gap:.8rem;padding:.8rem .95rem;border-radius:10px;background:var(--surface2);border:1px solid var(--border)}
+.bullet-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:.45rem}
+.bullet-text{font-size:clamp(.9rem,1.45vw,1.05rem);color:var(--text-sub);line-height:1.5}
+
+/* ── TIMELINE ── */
+.s-timeline .card{padding:2rem 2.5rem 2rem 2.8rem}
+.s-timeline .stitle{font-size:clamp(1.4rem,2.5vw,2rem);margin:.4rem 0 .5rem}
+.tl-wrap{display:flex;flex-direction:column;flex:1;margin-top:.7rem;position:relative;padding-left:1.8rem}
+.tl-wrap::before{content:'';position:absolute;left:.55rem;top:.4rem;bottom:.4rem;width:2px;background:linear-gradient(to bottom,var(--blue),var(--teal),var(--gold));border-radius:2px}
+.tl-item{display:flex;gap:1rem;align-items:flex-start;position:relative}
+.tl-item+.tl-item{margin-top:.8rem}
+.tl-dot{width:13px;height:13px;border-radius:50%;flex-shrink:0;position:absolute;left:-2.15rem;top:.25rem;border:2px solid var(--bg);box-shadow:0 0 7px currentColor}
+.tl-content{flex:1}
+.tl-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.18rem}
+.tl-title{font-family:'Cormorant Garamond',serif;font-size:clamp(.95rem,1.7vw,1.25rem);font-weight:700;color:var(--text);margin-bottom:.2rem}
+.tl-body{font-size:clamp(.78rem,1.28vw,.92rem);color:var(--text-muted);line-height:1.55}
+
+/* ── COMPARE ── */
+.s-compare .card{padding:1.8rem 2.5rem;gap:.7rem}
+.compare-hdr .stitle{font-size:clamp(1.6rem,3.2vw,2.6rem)}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;flex:1;position:relative}
+.compare-vs{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:42px;height:42px;border-radius:50%;background:var(--surface3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;color:var(--blue);z-index:2}
+.compare-col{display:flex;flex-direction:column;gap:.5rem}
+.compare-col-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;padding:.65rem 1rem;border-radius:9px;text-align:center;font-weight:600;margin-bottom:.15rem}
+.col-a .compare-col-title{background:rgba(52,211,153,.1);color:var(--teal);border:1px solid rgba(52,211,153,.28)}
+.col-b .compare-col-title{background:rgba(96,165,250,.1);color:var(--blue);border:1px solid rgba(96,165,250,.28)}
+.compare-item{padding:.6rem .95rem;border-radius:9px;border:1px solid var(--border);background:var(--surface2);font-size:clamp(.85rem,1.35vw,.97rem);color:var(--text-sub);line-height:1.4;display:flex;align-items:center}
+
+/* ── CTA ── */
+.s-cta .card{flex-direction:row}
+.cta-left{flex:1;padding:2.8rem 3.2rem;display:flex;flex-direction:column;justify-content:center}
+.cta-num{font-family:'JetBrains Mono',monospace;font-size:.56rem;letter-spacing:.2em;color:var(--blue);opacity:.65;margin-bottom:1.6rem}
+.cta-big{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1.4rem,3.2vw,2.7rem);font-weight:600;line-height:1.3;color:var(--text);margin-bottom:1rem}
+.cta-big strong{color:var(--blue);font-style:normal;-webkit-text-fill-color:var(--blue)}
+.cta-body{font-size:clamp(.88rem,1.4vw,1.02rem);color:var(--text-muted);line-height:1.7;max-width:480px}
+.cta-right{width:38%;flex-shrink:0;padding:.8rem .8rem .8rem 0}
+
+/* ── GALLERY ── */
+.s-gallery .card{padding:2rem 2.5rem}
+.s-gallery .stitle{font-size:clamp(1.4rem,2.5vw,2rem);margin:.4rem 0 .6rem}
+.gallery-grid{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:.8rem;flex:1;margin-top:.5rem}
+.gallery-slot{border-radius:10px;overflow:hidden;min-height:0}
+.gallery-slot.span2{grid-row:span 2}
+
+/* ── GALLERY2 ── */
+.s-gallery2 .card{flex-direction:row;padding:0}
+.g2-left{flex:1;padding:2.4rem 2.8rem;display:flex;flex-direction:column;justify-content:center}
+.g2-left .tag{margin-bottom:.8rem}
+.g2-left .stitle{font-size:clamp(1.4rem,2.5vw,2rem);margin:.5rem 0 1rem}
+.g2-body{font-family:'Cormorant Garamond',serif;font-size:clamp(1rem,1.7vw,1.18rem);color:var(--text-sub);line-height:1.72}
+.g2-body em{color:var(--blue)}
+.g2-right{width:44%;flex-shrink:0;padding:.8rem .8rem .8rem 0;display:flex;flex-direction:column;gap:.7rem}
+.g2-photo{flex:1;min-height:0}
+
+/* ── HIGHLIGHT CARD ── */
+.s-highlight .card{flex-direction:row}
+.hl-left{flex:1;padding:2.8rem 3.2rem;display:flex;flex-direction:column;justify-content:center}
+.hl-left .tag{margin-bottom:1rem}
+.hl-big{font-family:'Cormorant Garamond',serif;font-size:clamp(1.3rem,3vw,2.5rem);font-weight:700;line-height:1.25;color:var(--text);margin:.5rem 0 1rem}
+.hl-big em{color:var(--blue);font-style:italic;-webkit-text-fill-color:var(--blue)}
+.hl-body{font-size:clamp(.9rem,1.4vw,1.05rem);color:var(--text-sub);line-height:1.7;max-width:480px}
+.hl-right{width:40%;flex-shrink:0;padding:.8rem .8rem .8rem 0}
+
+/* ── THANK YOU ── */
+.s-ty .card{flex-direction:row}
+.ty-left{flex:1;padding:2.8rem 3.2rem;display:flex;flex-direction:column;align-items:flex-start;justify-content:center}
+.ty-big{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,7vw,5.5rem);font-weight:700;font-style:italic;line-height:1;background:linear-gradient(135deg,var(--text) 0%,var(--blue) 42%,var(--teal) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:.5rem 0 .6rem}
+.ty-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(.88rem,1.7vw,1.2rem);color:var(--text-sub);margin-bottom:2rem}
+.ty-div{width:40px;height:1px;background:linear-gradient(90deg,var(--blue),transparent);margin-bottom:2rem}
+.ty-right{width:40%;flex-shrink:0;padding:.8rem .8rem .8rem 0}
+.ty-sparks{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.ty-spark{position:absolute;border-radius:50%;opacity:0;animation:ty-rise linear infinite}
+@keyframes ty-rise{0%{opacity:0;transform:translateY(0) scale(1)}15%{opacity:.7}85%{opacity:.25}100%{opacity:0;transform:translateY(-90px) translateX(var(--dx)) scale(.2)}}
+
+/* ── ANIMATIONS ── */
+@keyframes fi{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes su{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:none}}
+.slide.active .tag{animation:fi .38s .05s both}
+.slide.active .stitle{animation:fi .38s .1s both}
+.slide.active .divider{animation:fi .38s .15s both}
+.slide.active .bullet-item:nth-child(1){animation:fi .32s .16s both}
+.slide.active .bullet-item:nth-child(2){animation:fi .32s .24s both}
+.slide.active .bullet-item:nth-child(3){animation:fi .32s .32s both}
+.slide.active .bullet-item:nth-child(4){animation:fi .32s .40s both}
+.slide.active .bullet-item:nth-child(5){animation:fi .32s .48s both}
+.slide.active .igc:nth-child(1){animation:su .32s .14s both}
+.slide.active .igc:nth-child(2){animation:su .32s .21s both}
+.slide.active .igc:nth-child(3){animation:su .32s .28s both}
+.slide.active .igc:nth-child(4){animation:su .32s .35s both}
+.slide.active .igc:nth-child(5){animation:su .32s .42s both}
+.slide.active .igc:nth-child(6){animation:su .32s .49s both}
+.slide.active .tl-item:nth-child(1){animation:fi .32s .15s both}
+.slide.active .tl-item:nth-child(2){animation:fi .32s .25s both}
+.slide.active .tl-item:nth-child(3){animation:fi .32s .35s both}
+.slide.active .tl-item:nth-child(4){animation:fi .32s .45s both}
+.slide.active .tl-item:nth-child(5){animation:fi .32s .55s both}
+.slide.active .stat-num{animation:su .48s .08s both}
+.slide.active .opener-big{animation:fi .55s .12s both}
+.slide.active .quote-text{animation:fi .48s .1s both}
+
+/* ── RESPONSIVE ── */
+@media(max-width:700px){
+  #top{height:40px;padding:0 .8rem}
+  #sw{top:40px;bottom:40px}
+  .s-title .card,.s-story .card,.s-stat .card,.s-quote .card,.s-cta .card,.s-twocol .card,.s-ty .card,.s-gallery2 .card,.s-highlight .card{flex-direction:column}
+  .title-right,.story-photo-wrap,.stat-right,.tc-right,.cta-right,.ty-right,.g2-right,.hl-right{width:100%;padding:.5rem .5rem 0}
+  .title-right{min-height:160px}
+  .story-photo-wrap,.stat-right,.tc-right,.cta-right,.ty-right,.g2-right,.hl-right{min-height:150px}
+  .title-left,.story-content,.stat-left,.tc-left,.cta-left,.ty-left,.g2-left,.hl-left{padding:1.4rem 1.2rem}
+  .s-opener .card{padding:1.8rem 1.5rem}
+  .opener-big{font-size:clamp(1.2rem,5.5vw,1.8rem)}
+  .ig{grid-template-columns:1fr 1fr;gap:.6rem}
+  .gallery-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto;gap:.6rem}
+  .gallery-slot.span2{grid-row:auto}
+  .s-compare .card{padding:1.2rem}
+  .compare-grid{grid-template-columns:1fr;gap:.4rem}
+  .compare-vs{display:none}
+  .s-timeline .card{padding:1.3rem 1.1rem 1.3rem 1.7rem}
+  #bot{height:40px}
+  .nb{width:30px;height:26px}
+  #dots{max-width:80px}
+  #slbl{display:none}
+}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div id="prog"></div>
+
+<header id="top">
+  <div id="top-l">The Secure Developer &amp; Engineer &middot; Cybersecurity 2026</div>
+  <div id="top-r">
+    <div id="sc"><b id="cn">1</b> / <span id="tn">40</span></div>
+    <button class="icon-btn" id="fsb" title="Fullscreen (F)">
+      <svg viewBox="0 0 24 24">
+        <path class="ic-expand" d="M8 3H5a2 2 0 0 0-2 2v3"/>
+        <path class="ic-expand" d="M21 8V5a2 2 0 0 0-2-2h-3"/>
+        <path class="ic-expand" d="M3 16v3a2 2 0 0 0 2 2h3"/>
+        <path class="ic-expand" d="M16 21h3a2 2 0 0 0 2-2v-3"/>
+        <path class="ic-compress" d="M8 3v5H3"/>
+        <path class="ic-compress" d="M21 8h-5V3"/>
+        <path class="ic-compress" d="M3 16h5v5"/>
+        <path class="ic-compress" d="M16 21v-5h5"/>
+      </svg>
+    </button>
+    <button id="tog" aria-label="Toggle theme"></button>
+  </div>
+</header>
+
+<div class="nz L" id="nzL"><div class="arr">&#8592;</div></div>
+<div class="nz R" id="nzR"><div class="arr">&#8594;</div></div>
+<main id="sw"></main>
+<div id="hint">arrow keys &middot; swipe &middot; click edges to navigate</div>
+<div id="sbox"><span id="slbl">SLIDE</span><input id="sinp" type="number" min="1" placeholder="01"></div>
+<nav id="bot">
+  <button class="nb" id="bF">&#9646;&#9646;</button>
+  <button class="nb" id="bP">&#8592;</button>
+  <div id="dots"></div>
+  <button class="nb" id="bN">&#8594;</button>
+  <button class="nb" id="bL">&#9646;&#9646;</button>
+</nav>
+
+<script>
+/* ============================================================
+   PHOTO PATHS — set your image paths here.
+   Key = slot ID. Leave '' to show placeholder.
+   Example: s1_main: './images/hero.jpg'
+============================================================ */
+const PHOTOS = {
+  s1_main:   '',   // Title slide — main hero image
+  s3_main:   '',   // Mindset shift visual
+  s5_main:   '',   // Shift-Left diagram
+  s9_main:   '',   // API diagram
+  s12_main:  '',   // Authentication visual
+  s16_main:  '',   // Rate limiting visual
+  s23_main:  '',   // AI attacks visual
+  s28_main:  '',   // Philippines scams visual
+  s36_main:  '',   // Secure coding visual
+  s40_main:  '',   // Closing visual
+};
+/* ============================================================ */
+
+/* STARFIELD */
+(() => {
+  const cv=document.getElementById('cv'),cx=cv.getContext('2d');
+  let W,H,stars=[];
+  const rsz=()=>{W=cv.width=innerWidth;H=cv.height=innerHeight};
+  addEventListener('resize',rsz);rsz();
+  const cols=['#60a5fa','#a78bfa','#34d399','#fbbf24','#93c5fd','#6ee7b7'];
+  for(let i=0;i<180;i++)stars.push({x:Math.random(),y:Math.random(),r:Math.random()*1.3+.1,op:Math.random()*.45+.07,ts:Math.random()*.025+.003,tp:Math.random()*Math.PI*2,col:cols[Math.floor(Math.random()*cols.length)]});
+  let t=0;
+  const draw=()=>{cx.clearRect(0,0,W,H);t+=.016;stars.forEach(s=>{const tw=Math.sin(t*s.ts*60+s.tp)*.28+.72;cx.beginPath();cx.arc(s.x*W,s.y*H,s.r*tw,0,Math.PI*2);cx.fillStyle=s.col;cx.globalAlpha=s.op*tw;cx.fill()});cx.globalAlpha=1;requestAnimationFrame(draw)};
+  draw();
+})();
+
+const IC={
+  shield:`<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>`,
+  lock:`<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>`,
+  code:`<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>`,
+  alert:`<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/>`,
+  zap:`<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>`,
+  eye:`<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>`,
+  key:`<circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/>`,
+  users:`<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>`,
+  globe:`<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>`,
+  cpu:`<rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/>`,
+  database:`<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/>`,
+  wifi:`<path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1"/>`,
+  trending:`<polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>`,
+  heart:`<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>`,
+  camera:`<path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/>`,
+  img:`<rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>`,
+  refresh:`<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/>`,
+  mail:`<rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>`,
+  bot:`<rect width="18" height="10" x="3" y="11" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" x2="8" y1="16" y2="16"/><line x1="16" x2="16" y1="16" y2="16"/>`,
+  phone:`<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.99 12 19.79 19.79 0 0 1 1.92 3.38a2 2 0 0 1 1.99-2.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>`,
+};
+const mkSvg=(n,col,sz=17)=>`<svg viewBox="0 0 24 24" style="width:${sz}px;height:${sz}px;stroke:${col};fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round">${IC[n]||IC.shield}</svg>`;
+
+function pf(id,style='',fit='cover'){
+  const src=PHOTOS[id]||'';
+  if(src)return `<div class="photo-frame${fit==='contain'?' contain':''}" style="${style}"><img src="${src}" alt=""></div>`;
+  return `<div class="photo-frame" style="${style}"><div class="no-photo">${mkSvg('camera','var(--blue)',20)}<span>${id}</span></div></div>`;
+}
+
+/* ── SLIDES DATA ── */
+const slides=[
+/* 01 */ {type:'title',
+  event:'Cybersecurity Seminar · 2026',
+  title:'The Secure Developer<br>&amp; Engineer',
+  sub:'Building resilient systems · Defending the code you write · Securing the future of tech',
+  name:'Your Name',role:'Role / Designation',org:'Your Organization',
+  photoId:'s1_main'},
+
+/* 02 */ {type:'opener',pre:'Before we begin',
+  big:'Every system you build can and will be <strong>targeted.</strong>',
+  note:'Attackers don\'t care how small you are. They care how vulnerable you are.'},
+
+/* 03 */ {type:'story',tag:'The Mindset Shift',
+  title:'Security Is Now Your Responsibility',
+  body:`Cybersecurity is no longer just for security teams. It is part of your identity as a developer, engineer, or IT professional. <em>You write the logic that attackers exploit.</em> Every bug you ship is a potential vulnerability. The future of secure systems depends on how you build today.`,
+  photoId:'s3_main'},
+
+/* 04 */ {type:'timeline',tag:'Session Roadmap',title:"What We'll Cover Today",
+  items:[
+    {col:'#60a5fa',label:'Part 1',title:'The Mindset Shift',body:'Why developers are now the first line of defense.'},
+    {col:'#a78bfa',label:'Part 2',title:'API Security Deep Dive',body:'The most targeted attack surface in modern applications.'},
+    {col:'#fbbf24',label:'Part 3',title:'Modern Threats in 2026',body:'AI-powered attacks, deepfakes, and social engineering.'},
+    {col:'#34d399',label:'Part 4',title:'Real-World Cases',body:'Philippine and global incidents that were all preventable.'},
+    {col:'#f87171',label:'Part 5',title:'Best Practices',body:'Your personal action plan as a secure developer.'},
+  ]},
+
+/* 05 */ {type:'highlight',tag:'The New Mindset',
+  title:'Shift-Left Security: <em>Build it in, don\'t bolt it on.</em>',
+  body:'Instead of adding security at the end of the development cycle, Shift-Left means bringing it to the very beginning. You think about threats while designing — not after deployment. Security is not a feature you add. It is a habit you form.',
+  photoId:'s5_main'},
+
+/* 06 */ {type:'stat',tag:'Part 1: Why It Matters',
+  num:'68%',label:'of breaches involve a human element',
+  body:'Developers are the most impactful human element. A single misconfigured API, an unvalidated input field, or a hardcoded credential can expose millions of records. The code you write is the perimeter.',
+  source:'Verizon Data Breach Investigations Report 2024',
+  minis:[{v:'83%',l:'Breaches involving external actors'},{v:'$4.9M',l:'Average cost of a data breach in 2024'},{v:'277',l:'Average days to identify a breach'}],
+  photoId:''},
+
+/* 07 */ {type:'grid',tag:'Part 2: API Security',title:'Common API Vulnerabilities',
+  cards:[
+    {icon:'lock',col:'#f87171',title:'Broken Authentication',body:'Weak login systems, token misuse, and session flaws let attackers impersonate legitimate users.'},
+    {icon:'eye',col:'#fbbf24',title:'Broken Authorization',body:'IDOR attacks: change a user ID in the URL and access someone else\'s data. Always check permissions server-side.'},
+    {icon:'code',col:'#a78bfa',title:'Injection Attacks',body:'SQL, command, and code injection — all caused by trusting user input. Never trust user input.'},
+    {icon:'database',col:'#60a5fa',title:'Excessive Data Exposure',body:'APIs return too much data and rely on the frontend to hide it. Attackers don\'t use your frontend.'},
+    {icon:'wifi',col:'#34d399',title:'Lack of Rate Limiting',body:'Without limits, attackers brute-force thousands of passwords per second. Every endpoint needs a ceiling.'},
+    {icon:'alert',col:'#f87171',title:'Security Misconfiguration',body:'Default credentials, open cloud buckets, verbose error messages — small oversights with massive consequences.'},
+  ]},
+
+/* 08 */ {type:'quote',
+  text:'"Never trust user input. Validate everything. Sanitize all data. This is not a suggestion — it is a rule."',
+  attr:'— OWASP Top 10 Principle'},
+
+/* 09 */ {type:'twocol',tag:'API Best Practices',title:'How to Secure Your APIs',
+  bullets:[
+    {text:'Use JWT or OAuth 2.0 for authentication — implementation matters more than the tool.',col:'#60a5fa'},
+    {text:'Validate and sanitize every single input. Use allowlists, not just blocklists.',col:'#34d399'},
+    {text:'Always use HTTPS. Encrypt data in transit and at rest. No exceptions.',col:'#a78bfa'},
+    {text:'Implement Role-Based Access Control (RBAC) with the least privilege principle.',col:'#fbbf24'},
+    {text:'Log all activity. If you don\'t log, you won\'t detect attacks. Security is detection too.',col:'#f87171'},
+  ],
+  photoId:'s9_main'},
+
+/* 10 */ {type:'compare',tag:'Authentication Methods',title:'Old vs. Secure',
+  cols:[
+    {label:'Insecure Patterns',col:'rose',items:['Storing passwords in plain text','Using MD5 or SHA1 for hashing','No token expiry or rotation','Session IDs in URL parameters','No multi-factor authentication']},
+    {label:'Secure Patterns',col:'teal',items:['bcrypt / Argon2 password hashing','Short-lived JWT with refresh tokens','OAuth 2.0 + PKCE for authorization','HttpOnly, Secure, SameSite cookies','MFA on all sensitive endpoints']},
+  ]},
+
+/* 11 */ {type:'highlight',tag:'Broken Authentication',
+  title:'Predictable tokens are <em>unlocked doors.</em>',
+  body:'If your session token is user_id=42 — an attacker simply tries user_id=41, user_id=43. IDOR (Insecure Direct Object Reference) is one of the most common and most embarrassing vulnerabilities. Always use random, unpredictable identifiers and verify permissions on every request, server-side.',
+  photoId:'s12_main'},
+
+/* 12 */ {type:'stat',tag:'Injection Attacks',
+  num:'#3',label:'OWASP rank for injection vulnerabilities',
+  body:'SQL injection alone has been responsible for some of the largest data breaches in history. A single unparameterized query can expose an entire database. The fix is straightforward: use parameterized queries, prepared statements, and ORMs with proper escaping.',
+  source:'OWASP Top 10 · 2023 Edition',
+  minis:[{v:'94%',l:'Of apps tested had some form of broken access control'},{v:'$1.7M',l:'Avg. SQL injection breach cost'}],
+  photoId:''},
+
+/* 13 */ {type:'highlight',tag:'Rate Limiting',
+  title:'Without limits, attackers try <em>a million passwords a minute.</em>',
+  body:'Brute force attacks are trivially automated. Without rate limiting, an attacker can hammer your login endpoint indefinitely. Implement: request throttling per IP, progressive delays, CAPTCHA after N failed attempts, account lockout with notifications, and API gateway rate limits.',
+  photoId:'s16_main'},
+
+/* 14 */ {type:'opener',pre:'Part 3: Modern Threats',
+  big:'Attackers now have <strong>AI on their side.</strong>',
+  note:'Attacks are faster, smarter, and harder to detect than ever before.'},
+
+/* 15 */ {type:'grid',tag:'Modern Threat Landscape',title:'Attacks in 2026',
+  cards:[
+    {icon:'bot',col:'#f87171',title:'AI-Powered Attacks',body:'Automated vulnerability scanning, AI-generated exploits, and intelligent fuzzing — what took days now takes minutes.'},
+    {icon:'mail',col:'#fbbf24',title:'AI Phishing',body:'Personalized emails with zero grammar errors that know your name, your habits, and your writing style. Alarmingly convincing.'},
+    {icon:'phone',col:'#a78bfa',title:'Deepfake Voice Scams',body:'AI voice cloning impersonates executives. "Your boss" calls urgently requesting a fund transfer. It sounds exactly like them.'},
+    {icon:'users',col:'#60a5fa',title:'Social Engineering',body:'Humans are the weakest link. Attackers don\'t just hack systems — they hack people through trust and urgency.'},
+    {icon:'cpu',col:'#34d399',title:'Supply Chain Attacks',body:'Malicious packages in npm, PyPI, and open-source dependencies. You import someone else\'s vulnerability.'},
+    {icon:'globe',col:'#f87171',title:'API Scraping & Enumeration',body:'Automated bots probe every endpoint, parameter, and response to map your system before the attack begins.'},
+  ]},
+
+/* 16 */ {type:'quote',
+  text:'"The question is no longer if you will be attacked. The question is whether you will notice."',
+  attr:'— Cybersecurity and Infrastructure Security Agency (CISA)'},
+
+/* 17 */ {type:'twocol',tag:'AI-Powered Phishing',title:'Why You\'ll Click It',
+  bullets:[
+    {text:'AI generates perfectly written emails — no typos, no awkward phrasing, no red flags.',col:'#f87171'},
+    {text:'It knows your name, your company, your manager\'s name, and your recent activity.',col:'#fbbf24'},
+    {text:'Urgency is weaponized: "Your account will be locked in 24 hours — act now."',col:'#a78bfa'},
+    {text:'Links mimic real domains: paypa1.com, rnybank.com — one character off.',col:'#60a5fa'},
+    {text:'Defense: verify out-of-band, hover before clicking, use hardware security keys.',col:'#34d399'},
+  ],
+  photoId:'s23_main'},
+
+/* 18 */ {type:'opener',pre:'Part 4: Real-World Cases',
+  big:'Most of these attacks were <strong>completely preventable.</strong>',
+  note:'No advanced hacking required. Just simple security gaps.'},
+
+/* 19 */ {type:'timeline',tag:'Global Incidents',title:'Lessons from Major Breaches',
+  items:[
+    {col:'#60a5fa',label:'Facebook / Meta',title:'API Misuse & Data Overexposure',body:'Poor access controls on the Graph API exposed hundreds of millions of user records. Cambridge Analytica harvested 87M profiles without consent.'},
+    {col:'#a78bfa',label:'Twitter / X',title:'API Abuse & Account Takeovers',body:'API vulnerabilities allowed mass enumeration of users and account takeovers. Even verified accounts were compromised through social engineering of employees.'},
+    {col:'#fbbf24',label:'Equifax 2017',title:'Unpatched Apache Struts',body:'A known vulnerability was left unpatched for months. 147 million records exposed. The fix was available 2 months before the breach.'},
+    {col:'#34d399',label:'Log4Shell 2021',title:'Supply Chain Catastrophe',body:'A single logging library vulnerability affected hundreds of thousands of systems worldwide. Attackers exploited it within hours of disclosure.'},
+    {col:'#f87171',label:'MOVEit 2023',title:'Zero-Day SQL Injection',body:'SQL injection in a file transfer tool cascaded to affect hundreds of organizations globally, including government agencies.'},
+  ]},
+
+/* 20 */ {type:'gallery2',tag:'Philippines Context',title:'Scams Hitting Home',
+  body:`GCash phishing pages, fake BDO and BPI SMS messages, AI voice cloning scams, and fraudulent job offers — <em>these are not just statistics, they affect real Filipinos every day.</em> Most victims never saw it coming because the attacks looked completely legitimate.`,
+  photoIds:['s28_main']},
+
+/* 21 */ {type:'stat',tag:'Philippine Cybercrime',
+  num:'₱17B+',label:'estimated annual cybercrime losses in the Philippines',
+  body:'SMS spoofing, SIM swapping, phishing, and investment scams are at epidemic levels. The Philippine National Police Anti-Cybercrime Group receives hundreds of reports daily. Most attacks exploit human trust, not technical vulnerabilities.',
+  source:'DICT Cybersecurity Bureau · BSP Annual Report 2024',
+  minis:[{v:'400%',l:'Rise in AI-assisted scam reports since 2023'},{v:'1 in 4',l:'Filipinos who have received a phishing attempt'}],
+  photoId:''},
+
+/* 22 */ {type:'grid',tag:'Local Threat Patterns',title:'How Filipinos Are Being Targeted',
+  cards:[
+    {icon:'phone',col:'#f87171',title:'GCash Phishing',body:'Fake login pages mimicking the official GCash app. Users enter credentials and lose their entire balance within minutes.'},
+    {icon:'mail',col:'#fbbf24',title:'SMS Spoofing',body:'Messages appear to come from BDO, BPI, or GCash official numbers. The sender ID is faked — your bank never sent that message.'},
+    {icon:'bot',col:'#a78bfa',title:'AI Voice Scams',body:'Cloned voices of relatives or employers asking for emergency money transfers. The voice is indistinguishable from the real person.'},
+    {icon:'users',col:'#60a5fa',title:'Recruitment Scams',body:'Fake job offers collect personal data, government IDs, and bank details. Fresh graduates are primary targets.'},
+    {icon:'globe',col:'#34d399',title:'Investment Scams',body:'Fake trading platforms with fabricated returns. Victims invest more until withdrawal is impossible.'},
+    {icon:'alert',col:'#f87171',title:'SIM Swap Attacks',body:'Attackers convince carriers to transfer your number to their SIM, bypassing all SMS-based two-factor authentication.'},
+  ]},
+
+/* 23 */ {type:'highlight',tag:'The Key Lesson',
+  title:'<em>Simple gaps</em> cause catastrophic breaches.',
+  body:'Cambridge Analytica did not "hack" Facebook. They used a legitimate API with excessive permissions. Equifax was breached through a patch that existed for months. Log4Shell affected systems that never audited their dependencies. The pattern is always the same: known issue, ignored, exploited. Security is discipline, not magic.',
+  photoId:''},
+
+/* 24 */ {type:'opener',pre:'Part 5: Best Practices',
+  big:'<strong>Think like an attacker</strong> before you write a single line of code.',
+  note:'Before writing code, ask: "How can this be abused?"'},
+
+/* 25 */ {type:'grid',tag:'Secure Coding Principles',title:'Your Developer Security Checklist',
+  cards:[
+    {icon:'alert',col:'#f87171',title:'Never Trust Input',body:'Validate and sanitize every piece of user-supplied data. Assume every input is an attack until proven otherwise.'},
+    {icon:'lock',col:'#60a5fa',title:'Defense in Depth',body:'Multiple security layers. If one fails, others hold. Never rely on a single control to protect sensitive data.'},
+    {icon:'key',col:'#a78bfa',title:'Least Privilege',body:'Every user, service, and process gets only the minimum access required. Nothing more, ever.'},
+    {icon:'eye',col:'#34d399',title:'Fail Securely',body:'When errors occur, fail closed not open. Never expose stack traces, database errors, or internal paths to users.'},
+    {icon:'refresh',col:'#fbbf24',title:'Keep Dependencies Updated',body:'Audit your packages. Set up Dependabot or Snyk. One outdated library can compromise your entire application.'},
+    {icon:'trending',col:'#f87171',title:'Log Everything Meaningful',body:'Security without logging is blind. Log authentication events, access control failures, and input validation errors.'},
+  ]},
+
+/* 26 */ {type:'twocol',tag:'Authentication Checklist',title:'Before You Ship: Auth Review',
+  bullets:[
+    {text:'Passwords hashed with bcrypt, Argon2, or scrypt — never MD5, SHA1, or plain text.',col:'#60a5fa'},
+    {text:'Session tokens are cryptographically random, unexpired tokens are invalidated on logout.',col:'#34d399'},
+    {text:'Multi-factor authentication available and enforced on admin and sensitive accounts.',col:'#a78bfa'},
+    {text:'Failed login attempts are rate limited, logged, and trigger alerts after N failures.',col:'#fbbf24'},
+    {text:'Password reset flows do not reveal whether an email exists in the system.',col:'#f87171'},
+  ],
+  photoId:'s36_main'},
+
+/* 27 */ {type:'compare',tag:'Mindset Comparison',title:'Old Mindset vs. Secure Mindset',
+  cols:[
+    {label:'Old Mindset',col:'rose',items:['Build first, secure later','Security is the security team\'s job','"We\'re too small to be a target"','Testing only for functionality','Fixing vulnerabilities only when reported']},
+    {label:'Secure Mindset',col:'teal',items:['Security starts at design phase','Every developer is a security engineer','Every system is a target regardless of size','Threat modeling before writing code','Continuous automated security scanning']},
+  ]},
+
+/* 28 */ {type:'timeline',tag:'Building Security Culture',title:'Your Roadmap as a Secure Developer',
+  items:[
+    {col:'#60a5fa',label:'Today — Student',title:'Learn the OWASP Top 10',body:'These ten categories cover the vast majority of real-world vulnerabilities. Know them, recognize them, fix them.'},
+    {col:'#a78bfa',label:'Year 1 — Junior Dev',title:'Make Security Personal',body:'Add security review to your own PR checklist. Be the colleague who asks "what happens if someone sends malicious data here?"'},
+    {col:'#fbbf24',label:'Year 2-3 — Mid Level',title:'Champion Threat Modeling',body:'Before building any new feature, spend 30 minutes asking: what are the attack surfaces? What can go wrong?'},
+    {col:'#34d399',label:'Year 4-5 — Senior',title:'Build Security Into the Pipeline',body:'Automate SAST, DAST, dependency scanning in CI/CD. Security that doesn\'t slow down developers gets adopted.'},
+    {col:'#f87171',label:'Always',title:'Stay Current',body:'Cybersecurity evolves daily. Follow CISA advisories, subscribe to CVE feeds, practice on HackTheBox or TryHackMe.'},
+  ]},
+
+/* 29 */ {type:'highlight',tag:'Continuous Security',
+  title:'Security doesn\'t end at deployment. <em>It starts there.</em>',
+  body:'Production is when your system faces real attackers for the first time. Monitor authentication failures, API abuse patterns, and anomalous data access. Set up alerts. Run penetration tests. Conduct regular security reviews. A system that is not actively monitored is a system that has already been compromised — you just don\'t know it yet.',
+  photoId:''},
+
+/* 30 */ {type:'quote',
+  text:'"Security is a process, not a product. Every developer who treats it as an afterthought ships the next headline-making breach."',
+  attr:'— Bruce Schneier, cryptographer & security technologist'},
+
+/* 31 */ {type:'grid',tag:'Tools of the Trade',title:'Every Secure Developer Uses These',
+  cards:[
+    {icon:'code',col:'#60a5fa',title:'SAST Tools',body:'Static Application Security Testing: Semgrep, Bandit, ESLint Security. Scan code before it runs.'},
+    {icon:'globe',col:'#34d399',title:'DAST Tools',body:'Dynamic Analysis: OWASP ZAP, Burp Suite. Test running applications for live vulnerabilities.'},
+    {icon:'database',col:'#a78bfa',title:'Dependency Scanning',body:'Snyk, Dependabot, npm audit. Know every CVE in every package you import.'},
+    {icon:'lock',col:'#fbbf24',title:'Secrets Management',body:'HashiCorp Vault, AWS Secrets Manager. Never hardcode credentials. Never commit .env files.'},
+    {icon:'eye',col:'#f87171',title:'Logging & SIEM',body:'Splunk, Elastic, Datadog. Centralize logs. Create alerts for suspicious patterns.'},
+    {icon:'shield',col:'#60a5fa',title:'WAF & API Gateway',body:'Web Application Firewalls and API gateways as your first line of defense at the perimeter.'},
+  ]},
+
+/* 32 */ {type:'stat',tag:'The Impact of Security',
+  num:'40×',label:'cheaper to fix a bug in development vs. production',
+  body:'IBM\'s Systems Sciences Institute found that bugs found during design cost $1 to fix. The same bug costs $100 in development, and $10,000 in production post-release. Security is not overhead — it is the most cost-effective engineering investment you can make.',
+  source:'IBM Systems Sciences Institute · NIST Cost of Vulnerability Studies',
+  minis:[{v:'$0.14',l:'Cost per line to add security in design'},{v:'$7.00',l:'Cost per line to fix in production'}],
+  photoId:''},
+
+/* 33 */ {type:'twocol',tag:'For Your Team',title:'Building a Security-Aware Culture',
+  bullets:[
+    {text:'Blameless post-mortems: when something breaks, fix the system, not the person.',col:'#60a5fa'},
+    {text:'Security champions in every team — one developer who owns security context and training.',col:'#34d399'},
+    {text:'Mandatory security review in every pull request, not just feature and performance.',col:'#a78bfa'},
+    {text:'Regular Capture The Flag (CTF) participation builds both skills and team camaraderie.',col:'#fbbf24'},
+    {text:'Reward reporting vulnerabilities internally — never punish the person who finds a flaw.',col:'#f87171'},
+  ],
+  photoId:''},
+
+/* 34 */ {type:'opener',pre:'Final Thought',
+  big:'You are not just a developer. <strong>You are a defender.</strong>',
+  note:'The future of secure systems depends entirely on how you build today.'},
+
+/* 35 */ {type:'grid',tag:'Your Action Plan',title:'Six Things to Do This Week',
+  cards:[
+    {icon:'shield',col:'#60a5fa',title:'Read OWASP Top 10',body:'Download it, read it end to end. Bookmark it. Come back to it every year — it updates.'},
+    {icon:'lock',col:'#34d399',title:'Audit One Project',body:'Pick one codebase you own. Look for hardcoded secrets, missing validation, unparameterized queries.'},
+    {icon:'key',col:'#a78bfa',title:'Enable MFA Everywhere',body:'Your GitHub, cloud consoles, email. Start with yourself before you preach it to others.'},
+    {icon:'eye',col:'#fbbf24',title:'Add One Security Test',body:'Write one automated security test for your most critical endpoint. Make it part of CI.'},
+    {icon:'trending',col:'#f87171',title:'Subscribe to CISA Alerts',body:'Free, authoritative, actionable advisories on active threats and new vulnerabilities.'},
+    {icon:'users',col:'#60a5fa',title:'Share This With One Person',body:'Security culture spreads one conversation at a time. Tell a colleague one thing you learned today.'},
+  ]},
+
+/* 36 */ {type:'highlight',tag:'The Golden Rules',
+  title:'Three rules every secure developer lives by.',
+  body:'1 — Never trust user input. Validate and sanitize everything, always, without exception. &nbsp;&nbsp; 2 — Least privilege: every account, service, and system gets only the minimum access it needs and nothing more. &nbsp;&nbsp; 3 — Security is continuous: it does not end at deployment, it begins there. Monitor, test, update, repeat.',
+  photoId:'s40_main'},
+
+/* 37 */ {type:'quote',
+  text:'"Security is not a feature. It is not a phase. It is the discipline of building things that are worthy of the trust people place in them."',
+  attr:'— Adapted from the Secure Software Development Framework (SSDF)'},
+
+/* 38 */ {type:'opener',pre:'Open Floor',
+  big:'What questions do you have? <strong>This is your time.</strong>',
+  note:'No question is too small. No code is too embarrassing. Ask anything.'},
+
+/* 39 */ {type:'twocol',tag:'Resources to Continue Learning',title:'Where to Go From Here',
+  bullets:[
+    {text:'OWASP.org — the definitive free resource for web application security knowledge.',col:'#60a5fa'},
+    {text:'TryHackMe & HackTheBox — hands-on labs where you practice exploiting and defending real systems.',col:'#34d399'},
+    {text:'CISA.gov — official advisories, free training, and the Known Exploited Vulnerabilities catalog.',col:'#a78bfa'},
+    {text:'PortSwigger Web Security Academy — free, world-class, practical web security training.',col:'#fbbf24'},
+    {text:'The Web Application Hacker\'s Handbook — still the most comprehensive technical reference.',col:'#f87171'},
+  ],
+  photoId:''},
+
+/* 40 */ {type:'ty',
+  photoId:'s40_main'},
+];
+
+/* ── HELPERS ── */
+const sw=document.getElementById('sw'),dotsEl=document.getElementById('dots');
+document.getElementById('tn').textContent=slides.length;
+const mkTag=t=>`<span class="tag">${t}</span>`;
+const mkTitle=t=>`<h2 class="stitle">${t}</h2>`;
+const mkDiv=()=>`<div class="divider"></div>`;
+
+/* ── BUILD ── */
+slides.forEach((d,i)=>{
+  const el=document.createElement('div');
+  el.dataset.i=i;
+
+  if(d.type==='title'){
+    el.className='slide s-title';
+    el.innerHTML=`<div class="card">
+  <div style="position:absolute;top:-60px;right:20%;width:60%;height:200px;background:radial-gradient(ellipse,rgba(96,165,250,.1) 0%,transparent 70%);pointer-events:none"></div>
+  <div class="title-left">
+    <div class="title-event">${d.event}</div>
+    <h1 class="title-h">${d.title}</h1>
+    <p class="title-sub">${d.sub}</p>
+    <div class="title-presenter">
+      <div class="title-name">${d.name}</div>
+      <div class="title-role">${d.role}</div>
+      <div class="title-org">${d.org}</div>
+    </div>
+  </div>
+  <div class="title-right">${pf(d.photoId,'border-radius:12px;height:100%')}</div>
+</div>`;
+
+  } else if(d.type==='opener'){
+    el.className='slide s-opener';
+    el.innerHTML=`<div class="card">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,rgba(96,165,250,.07) 0%,transparent 68%);pointer-events:none"></div>
+  <p class="opener-pre">${d.pre}</p>
+  <p class="opener-big">${d.big}</p>
+  <p class="opener-note">${d.note}</p>
+</div>`;
+
+  } else if(d.type==='story'){
+    el.className='slide s-story';
+    el.innerHTML=`<div class="card">
+  <div class="story-photo-wrap">${pf(d.photoId,'border-radius:12px;height:100%')}</div>
+  <div class="story-content">
+    ${mkTag(d.tag)}${mkTitle(d.title)}${mkDiv()}
+    <p class="story-body">${d.body}</p>
+  </div>
+</div>`;
+
+  } else if(d.type==='gallery2'){
+    el.className='slide s-gallery2';
+    const pHTML=(d.photoIds||[]).map(id=>`<div class="g2-photo">${pf(id,'border-radius:10px;height:100%')}</div>`).join('');
+    el.innerHTML=`<div class="card">
+  <div class="g2-left">${mkTag(d.tag)}${mkTitle(d.title)}${mkDiv()}<p class="g2-body">${d.body}</p></div>
+  <div class="g2-right">${pHTML}</div>
+</div>`;
+
+  } else if(d.type==='stat'){
+    el.className='slide s-stat';
+    const mHTML=(d.minis||[]).map(m=>`<div class="mini-item"><span class="mini-val">${m.v}</span><span class="mini-lbl">${m.l}</span></div>`).join('');
+    el.innerHTML=`<div class="card">
+  <div class="stat-left">
+    ${mkTag(d.tag)}
+    <div class="stat-num">${d.num}</div>
+    <div class="stat-label">${d.label}</div>
+    <p class="stat-body">${d.body}</p>
+    <div class="stat-source">${d.source}</div>
+  </div>
+  <div class="stat-right">
+    <div class="stat-photo-wrap">${pf(d.photoId,'border-radius:10px;height:100%')}</div>
+    <div class="mini-list">${mHTML}</div>
+  </div>
+</div>`;
+
+  } else if(d.type==='quote'){
+    el.className='slide s-quote';
+    el.innerHTML=`<div class="card">
+  <div class="quote-bar"></div>
+  <div class="quote-body">
+    <div class="quote-mark">&ldquo;</div>
+    <p class="quote-text">${d.text}</p>
+    <p class="quote-attr">${d.attr}</p>
+  </div>
+</div>`;
+
+  } else if(d.type==='grid'){
+    el.className='slide s-grid';
+    const gcHTML=(d.cards||[]).map(c=>`<div class="igc">
+  <div class="igc-icon" style="background:${c.col}18;border:1px solid ${c.col}2a">${mkSvg(c.icon,c.col)}</div>
+  <div class="igc-title">${c.title}</div>
+  <div class="igc-body">${c.body}</div>
+</div>`).join('');
+    el.innerHTML=`<div class="card">${mkTag(d.tag)}${mkTitle(d.title)}${mkDiv()}<div class="ig">${gcHTML}</div></div>`;
+
+  } else if(d.type==='twocol'){
+    el.className='slide s-twocol';
+    const bHTML=(d.bullets||[]).map(b=>`<div class="bullet-item">
+  <div class="bullet-dot" style="background:${b.col}"></div>
+  <span class="bullet-text">${b.text}</span>
+</div>`).join('');
+    el.innerHTML=`<div class="card">
+  <div class="tc-left">${mkTag(d.tag)}${mkTitle(d.title)}${mkDiv()}<div class="bullet-list">${bHTML}</div></div>
+  <div class="tc-right">${pf(d.photoId,'border-radius:12px;height:100%')}</div>
+</div>`;
+
+  } else if(d.type==='timeline'){
+    el.className='slide s-timeline';
+    const tlHTML=(d.items||[]).map(it=>`<div class="tl-item">
+  <div class="tl-dot" style="background:${it.col};color:${it.col}"></div>
+  <div class="tl-content">
+    <div class="tl-label" style="color:${it.col}">${it.label}</div>
+    <div class="tl-title">${it.title}</div>
+    <div class="tl-body">${it.body}</div>
+  </div>
+</div>`).join('');
+    el.innerHTML=`<div class="card">${mkTag(d.tag)}${mkTitle(d.title)}${mkDiv()}<div class="tl-wrap">${tlHTML}</div></div>`;
+
+  } else if(d.type==='compare'){
+    el.className='slide s-compare';
+    const colHTML=(c,side)=>`<div class="compare-col col-${side}">
+  <div class="compare-col-title">${c.label}</div>
+  ${c.items.map(it=>`<div class="compare-item">${it}</div>`).join('')}
+</div>`;
+    el.innerHTML=`<div class="card">
+  <div class="compare-hdr">${mkTag(d.tag)}${mkTitle(d.title)}</div>
+  <div class="compare-grid">
+    ${colHTML(d.cols[0],'a')}
+    ${colHTML(d.cols[1],'b')}
+    <div class="compare-vs">VS</div>
+  </div>
+</div>`;
+
+  } else if(d.type==='highlight'){
+    el.className='slide s-highlight';
+    el.innerHTML=`<div class="card">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(96,165,250,.06) 0%,transparent 65%);pointer-events:none"></div>
+  <div class="hl-left">
+    ${mkTag(d.tag)}
+    <div class="hl-big">${d.title}</div>
+    <p class="hl-body">${d.body}</p>
+  </div>
+  <div class="hl-right">${pf(d.photoId,'border-radius:12px;height:100%')}</div>
+</div>`;
+
+  } else if(d.type==='ty'){
+    el.className='slide s-ty';
+    const sparks=Array.from({length:18},(_,j)=>{
+      const c=['#60a5fa','#a78bfa','#34d399','#fbbf24','#93c5fd'][j%5];
+      return `<div class="ty-spark" style="left:${Math.random()*80+10}%;bottom:${Math.random()*30+5}%;width:${Math.random()*5+3}px;height:${Math.random()*5+3}px;background:${c};--dx:${(Math.random()-.5)*80}px;animation-duration:${Math.random()*3+2.5}s;animation-delay:${Math.random()*4}s"></div>`;
+    }).join('');
+    el.innerHTML=`<div class="card">
+  <div class="ty-sparks">${sparks}</div>
+  <div class="ty-left">
+    ${mkTag('Security is a Mindset')}
+    <div class="ty-big">Build Secure.<br>Stay Vigilant.</div>
+    <div class="ty-sub">You are not just a developer. You are a defender.</div>
+    <div class="ty-div"></div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--blue);letter-spacing:.1em">Your Name &nbsp;·&nbsp; Role &nbsp;·&nbsp; Organization</div>
+    <div style="margin-top:.5rem;font-family:'JetBrains Mono',monospace;font-size:.5rem;color:var(--text-muted);letter-spacing:.06em">The Secure Developer &amp; Engineer &nbsp;·&nbsp; Cybersecurity 2026</div>
+  </div>
+  <div class="ty-right">${pf(d.photoId,'border-radius:0 18px 18px 0;border:none;border-left:1px solid var(--border2);height:100%')}</div>
+</div>`;
+  }
+
+  sw.appendChild(el);
+});
+
+/* ── DOTS ── */
+slides.forEach((_,i)=>{
+  const d=document.createElement('div');
+  d.className='dot'+(i===0?' active':'');
+  d.addEventListener('click',()=>go(i));
+  dotsEl.appendChild(d);
+});
+
+/* ── NAVIGATION ── */
+let cur=0,busy=false;
+function go(i){
+  const tot=document.querySelectorAll('.slide').length;
+  if(busy||i===cur||i<0||i>=tot)return;
+  busy=true;
+  const old=document.querySelector('.slide.active');
+  if(old){old.classList.remove('active');old.classList.add('out');setTimeout(()=>old.classList.remove('out'),560)}
+  cur=i;
+  document.querySelectorAll('.slide')[cur].classList.add('active');
+  document.getElementById('cn').textContent=cur+1;
+  document.querySelectorAll('.dot').forEach((d,j)=>d.classList.toggle('active',j===cur));
+  document.getElementById('prog').style.width=((cur/(tot-1))*100)+'%';
+  upd();setTimeout(()=>busy=false,560);
+}
+function upd(){
+  const tot=document.querySelectorAll('.slide').length;
+  document.getElementById('bP').disabled=cur===0;
+  document.getElementById('bF').disabled=cur===0;
+  document.getElementById('bN').disabled=cur===tot-1;
+  document.getElementById('bL').disabled=cur===tot-1;
+}
+['bP','bN','bF','bL'].forEach(id=>document.getElementById(id).addEventListener('click',()=>{
+  const tot=document.querySelectorAll('.slide').length;
+  if(id==='bP')go(cur-1);else if(id==='bN')go(cur+1);else if(id==='bF')go(0);else go(tot-1);
+}));
+document.getElementById('nzL').addEventListener('click',()=>go(cur-1));
+document.getElementById('nzR').addEventListener('click',()=>go(cur+1));
+document.addEventListener('keydown',e=>{
+  const tot=document.querySelectorAll('.slide').length;
+  if(document.activeElement===document.getElementById('sinp'))return;
+  if(['ArrowRight','ArrowDown',' '].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(0);if(e.key==='End')go(tot-1);
+  if(e.key==='f'||e.key==='F')toggleFS();
+});
+let tx=0,ty2=0;
+sw.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty2=e.touches[0].clientY},{passive:true});
+sw.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty2;if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>38){dx<0?go(cur+1):go(cur-1)}},{passive:true});
+document.getElementById('tog').addEventListener('click',()=>{const h=document.documentElement;h.dataset.theme=h.dataset.theme==='dark'?'light':'dark'});
+function toggleFS(){if(!document.fullscreenElement){document.documentElement.requestFullscreen().catch(()=>{})}else{document.exitFullscreen()}}
+document.getElementById('fsb').addEventListener('click',toggleFS);
+document.addEventListener('fullscreenchange',()=>{
+  const f=!!document.fullscreenElement;
+  document.querySelectorAll('.ic-expand').forEach(e=>e.style.display=f?'none':'');
+  document.querySelectorAll('.ic-compress').forEach(e=>e.style.display=f?'':'none');
+});
+const sinp=document.getElementById('sinp');
+sinp.addEventListener('keydown',e=>{
+  if(e.key==='Enter'){const n=parseInt(sinp.value,10);const tot=document.querySelectorAll('.slide').length;if(!isNaN(n)&&n>=1&&n<=tot)go(n-1);sinp.value='';sinp.blur()}
+  if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))e.stopPropagation();
+});
+
+document.querySelectorAll('.slide')[0].classList.add('active');
+document.getElementById('prog').style.width='0%';
+upd();
+setTimeout(()=>document.getElementById('hint').classList.add('gone'),5000);
+</script>
+</body>
+</html>
